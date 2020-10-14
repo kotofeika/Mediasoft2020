@@ -8,6 +8,8 @@ class imagesContorller
     protected static string $queryAll = 'SELECT `user_id`,`name`,`views` FROM `pictures`';
     protected static string $sqlAll = 'SELECT `user_id`, `user_login` FROM `users`';
 
+    protected static string $select_where = 'SELECT `user_login` FROM `users` WHERE `user_id` = :id';
+
     protected static string $queryMy = 'SELECT `user_id`,`name` FROM `pictures` WHERE `user_id` = :id';
 
     protected static string $queryOne = 'SELECT `name`,`views` FROM `pictures` WHERE `name` = :id';
@@ -51,40 +53,6 @@ class imagesContorller
                                 </a>
                             </td>
                         </tr>
-                    </tbody>
-                </table><br>
-                <?php
-            }
-        }
-    }
-
-    public static function AdmShowUser()
-    {
-        $pdo = new DB();
-        $options = [':id' => $_GET['id'] ];
-        $PicData = $pdo->executeAll(self::$queryMy, $options);
-
-        if (!empty(self::$dir)) {
-            foreach ($PicData as $rowPicData) { ?>
-                <table align="center" id="uploaded_image" border="2" width="650px" height="650px">
-                    <thead bgcolor="#2F4F4F" style="color: #FFFFFF ">
-                    <td>
-                        <?php
-                        if ($_GET['id'] === $rowPicData['user_login']) {
-                            echo \Localhost\SessionManager::create()->user('user_login'); } ?>
-                        <a href="deleteImage.php?id=<?=  $rowPicData['name'] ?>"><font color="red">Удалить</font><a>
-                    </td>
-                    </thead>
-                    <tbody align="center" bgcolor="black">
-                    <tr>
-                        <td>
-                            <a href="details.php?id=<?= $rowPicData['name'] ?>">
-                                <div id="uploaded_image" class="blok_img">
-                                    <img src="<?= $rowPicData['name']  ?>" height="550px" class="pimg" title="<?= $rowPicData['name'] ?>"/>
-                                </div>
-                            </a>
-                        </td>
-                    </tr>
                     </tbody>
                 </table><br>
                 <?php
@@ -196,6 +164,45 @@ class imagesContorller
         }
     }
 
+    public static function AdmShowUser()
+    {
+        $pdo = new DB();
+        $id = $_GET['id'];
+        $options = [':id' => $_GET['id'] ];
+        $PicData = $pdo->executeAll(self::$queryMy, $options);
+        $UsersData = $pdo->execute(self::$select_where, $options); ?>
+        <table align="center">
+            <td>
+                <a href="deleteProfile.php?id=<?= $id ?>">Удалить профиль</a>
+            </td>
+        </table>
+        <?php if (!empty(self::$dir)) {
+        foreach ($PicData as $rowPicData) { ?>
+            <table align="center" id="uploaded_image" border="2" width="650px" height="650px">
+                <thead bgcolor="#2F4F4F" style="color: #FFFFFF ">
+                <td>
+                    <?php
+                    echo $UsersData['user_login']; ?>
+                    <a href="deleteImage.php?id=<?=  $rowPicData['name'] ?>"><font color="red">Удалить</font><a>
+                </td>
+                </thead>
+                <tbody align="center" bgcolor="black">
+                <tr>
+                    <td>
+                        <a href="details.php?id=<?= $rowPicData['name'] ?>">
+                            <div id="uploaded_image" class="blok_img">
+                                <img src="<?= $rowPicData['name']  ?>" height="550px" class="pimg" title="<?= $rowPicData['name'] ?>"/>
+                            </div>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table><br>
+            <?php
+        }
+    }
+    }
+
     public static function AdmShowAll()
     {
         $pdo = new DB();
@@ -209,10 +216,10 @@ class imagesContorller
                     <table align="center" id="uploaded_image" border="2" width="650px" height="650px">
                     <thead bgcolor="#2F4F4F" style="color: #FFFFFF ">
                     <?php if ($PicData['user_id'] === $rowUsersData['user_id']) { ?>
-                        <?php if ( $PicData['user_id'] == SessionManager::create()->user('user_id') ){ ?>
-                        <td> <font color="#f0f8ff"><font>   <?= $rowUsersData['user_login'], " " ?><a href="deleteImage.php?id=<?=  $PicData['name'] ?>"><font color="red">Удалить</font><a></td>
-                            <?php } if ( $PicData['user_id'] != SessionManager::create()->user('user_id') ){ ?>
-                        <td><a href="lk_form.php?id= <?= $rowUsersData['user_id'] ?>"> <font color="#f0f8ff"><font></a><?= $rowUsersData['user_login'], " " ?><a href="deleteImage.php?id=<?=  $PicData['name'] ?>"><font color="red">Удалить</font><a></td>
+                        <?php if ( $rowUsersData['user_login'] == SessionManager::create()->user('user_login') ){ ?>
+                        <td><a href="lk_form.php"> <?= $rowUsersData['user_login'], " " ?></a><a href="deleteImage.php?id=<?=  $PicData['name'] ?>"><font color="red">Удалить</font><a></td>
+                            <?php } if ( $PicData['user_id'] !== SessionManager::create()->user('user_id') ){ ?>
+                        <td><a href="lk_form.php?id= <?= $rowUsersData['user_id'] ?>"> <font color="#f0f8ff"><?= $rowUsersData['user_login'], " " ?><font></a><a href="deleteImage.php?id=<?=  $PicData['name'] ?>"><font color="red">Удалить</font><a></td>
                     <?php } } } ?>
                 </thead>
                 <tbody align="center" bgcolor="black">

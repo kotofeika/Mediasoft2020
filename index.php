@@ -1,9 +1,6 @@
 <?php
 require_once __DIR__ . "/vendor/autoload.php";
 \Localhost\SessionManager::create();
-
-var_dump(\Localhost\SessionManager::create()->user('user_login'));
-echo \Localhost\AdminCheck::Check();
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -20,7 +17,6 @@ echo \Localhost\AdminCheck::Check();
     <td>
         <?php
         if ( \Localhost\SessionManager::create()->isAuthorized() && (\Localhost\AdminCheck::Check() != null) ) {
-            var_dump(\Localhost\SessionManager::create()->isAuthorized());
         echo "Добро пожаловть ", \Localhost\SessionManager::create()->user('user_login'); ?> <font color="red">(Admin)</font> <?php ; ?>
     </td>
 
@@ -52,9 +48,6 @@ echo \Localhost\AdminCheck::Check();
         <button>Личный кабинет</button>
     </a>
     <?php
-    $info = \Localhost\SessionManager::create()->user('user_id');
-
-    var_dump($info);
     \Localhost\imagesContorller::ShowAll();
 }
 else {

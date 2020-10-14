@@ -44,34 +44,12 @@ if (\Localhost\SessionManager::create()->isAuthorized() && $_GET['id'] === null)
 </table>
 
 <?php \Localhost\imagesContorller::ShowMy();
-} if (\Localhost\SessionManager::create()->isAuthorized() && $_GET['id'] != \Localhost\SessionManager::create()->user('user_login') && \Localhost\AdminCheck::Check() === null ){ ?>
-    <table>
-        <td>
-            <?php echo \Localhost\SessionManager::create()->user('user_login'); ?>
-        </td>
-
-<td>
-    <div class="container">
-        <a href="logout.php"><img src="images/logout.jpg" height="50" alt="error"></a>
-    </div>
-</td>
-</table>
+} if (\Localhost\SessionManager::create()->isAuthorized() && $_GET['id'] != \Localhost\SessionManager::create()->user('user_id') && \Localhost\AdminCheck::Check() === null ){ ?>
 
 <?php \Localhost\imagesContorller::ShowUser();
 }
 
-if (\Localhost\SessionManager::create()->isAuthorized() && $_GET['id'] != \Localhost\SessionManager::create()->user('user_login') && \Localhost\AdminCheck::Check() != null ){ ?>
-    <table>
-        <td>
-            <?php echo \Localhost\SessionManager::create()->user('user_login'); ?>
-        </td>
-
-        <td>
-            <div class="container">
-                <a href="logout.php"><img src="images/logout.jpg" height="50" alt="error"></a>
-            </div>
-        </td>
-    </table>
+if (\Localhost\SessionManager::create()->isAuthorized() && ( $_GET['id'] != \Localhost\SessionManager::create()->user('user_id') || $_GET['id'] !=null ) && \Localhost\AdminCheck::Check() != null ){ ?>
 
     <?php \Localhost\imagesContorller::AdmShowUser();
 }

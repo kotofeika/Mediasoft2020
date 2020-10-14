@@ -4,7 +4,7 @@
 namespace Localhost;
 
 
-class Send
+class SendTo
 {
     public static function SendTo(string $file)
     {

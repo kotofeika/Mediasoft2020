@@ -49,5 +49,4 @@ class DB
         $statement = $this->connect->prepare($sql);
         $statement->execute($options);
     }
-
 }
