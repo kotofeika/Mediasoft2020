@@ -1,1 +1,0 @@
-authorized|b:1;errors|a:1:{s:5:"login";s:42:"Данный логин уже занят.";}user|a:3:{s:7:"user_id";s:1:"2";s:10:"user_login";s:9:"kotofeika";s:13:"user_password";s:4:"1337";}
